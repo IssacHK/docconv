@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"path/filepath"
 	"runtime"
 
 	"cloud.google.com/go/compute/metadata"
@@ -23,7 +24,8 @@ import (
 var (
 	listenAddr = flag.String("addr", ":8888", "The address to listen on (e.g. 127.0.0.1:8888)")
 
-	inputPath = flag.String("input", "", "The file path to convert and exit; no server")
+	inputPath    = flag.String("input", "", "The file path to convert and exit; no server")
+	docx2pdfPath = flag.String("docx2pdf", "", "Convert a DOCX to PDF and exit")
 
 	jsonCloudLogging = flag.Bool("json-cloud-logging", false, "Whether or not to enable JSON Cloud Logging")
 
@@ -102,6 +104,16 @@ func main() {
 		MaxLinkDensity:        *readabilityMaxLinkDensity,
 		MaxHeadingDistance:    *readabilityMaxHeadingDistance,
 		ReadabilityUseClasses: *readabilityUseClasses,
+	}
+
+	if *docx2pdfPath != "" {
+		pdfPath, err := docconv.ConvertDocxToPDF(*docx2pdfPath, filepath.Dir(*docx2pdfPath))
+		if err != nil {
+			l.Error("Could not convert DOCX to PDF", "error", err, "path", *docx2pdfPath)
+			os.Exit(1)
+		}
+		fmt.Print(pdfPath)
+		return
 	}
 
 	if *inputPath != "" {

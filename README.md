@@ -25,19 +25,20 @@ See `go help install` for details on the installation location of the installed 
 - wv
 - popplerutils
 - unrtf
+- libreoffice (or unoconv)
 - https://github.com/JalfResi/justext
 
 ### Debian-based Linux
 
 ```console
-$ sudo apt-get install poppler-utils wv unrtf tidy
+$ sudo apt-get install poppler-utils wv unrtf tidy libreoffice
 $ go get github.com/JalfResi/justext
 ```
 
 ### macOS
 
 ```console
-$ brew install poppler-qt5 wv unrtf tidy-html5
+$ brew install poppler-qt5 wv unrtf tidy-html5 libreoffice
 $ go get github.com/JalfResi/justext
 ```
 
@@ -158,4 +159,26 @@ Alternatively, via a `curl`:
 
 ```console
 $ curl -s -F input=@your-file.pdf http://localhost:8888/convert
+```
+
+### Convert DOCX to PDF
+
+If libreoffice is installed you can convert a DOCX file to a PDF using the helper function:
+
+```go
+package main
+
+import (
+        "fmt"
+
+        "code.sajari.com/docconv/v2"
+)
+
+func main() {
+        pdfPath, err := docconv.ConvertDocxToPDF("document.docx", "/tmp")
+        if err != nil {
+                // TODO: handle
+        }
+        fmt.Println("PDF written to", pdfPath)
+}
 ```
