@@ -5,113 +5,114 @@
 [![Report card](https://goreportcard.com/badge/code.sajari.com/docconv/v2)](https://goreportcard.com/report/code.sajari.com/docconv/v2)
 [![Sourcegraph](https://sourcegraph.com/github.com/sajari/docconv/v2/-/badge.svg)](https://sourcegraph.com/github.com/sajari/docconv/v2)
 
-A Go wrapper library to convert PDF, DOC, DOCX, XML, HTML, RTF, ODT, Pages documents and images (see optional dependencies below) to plain text.
+Go 語言的封裝函式庫，可將 PDF、DOC、DOCX、XML、HTML、RTF、ODT、Pages 文件以及影像（可選擇安裝的相依套件）轉為純文字。
 
-## Installation
+## 安裝
 
-If you haven't setup Go before, you first need to [install Go](https://golang.org/doc/install).
+若尚未安裝 Go，請先依照 [官方指南](https://golang.org/doc/install) 完成安裝。
 
-To fetch and build the code:
+接著抓取並建置程式碼：
 
 ```console
 $ go install code.sajari.com/docconv/v2/docd@latest
 ```
 
-See `go help install` for details on the installation location of the installed `docd` executable. Make sure that the full path to the executable is in your `PATH` environment variable.
+更多關於安裝後 `docd` 可執行檔路徑的說明，請參閱 `go help install`。安裝完成後請確定其路徑已加入 `PATH` 環境變數。
 
-## Dependencies
+## 依賴套件
 
 - tidy
 - wv
 - popplerutils
 - unrtf
+- libreoffice（或 unoconv）
 - https://github.com/JalfResi/justext
 
-### Debian-based Linux
+### Debian 系 Linux
 
 ```console
-$ sudo apt-get install poppler-utils wv unrtf tidy
+$ sudo apt-get install poppler-utils wv unrtf tidy libreoffice
 $ go get github.com/JalfResi/justext
 ```
 
 ### macOS
 
 ```console
-$ brew install poppler-qt5 wv unrtf tidy-html5
+$ brew install poppler-qt5 wv unrtf tidy-html5 libreoffice
 $ go get github.com/JalfResi/justext
 ```
 
-### Optional dependencies
+### 可選依賴
 
-To add image support to the `docconv` library you first need to [install and build gosseract](https://github.com/otiai10/gosseract/tree/v2.2.4).
+若要讓 `docconv` 支援影像轉換，必須先 [安裝並建置 gosseract](https://github.com/otiai10/gosseract/tree/v2.2.4)。
 
-Now you can add `-tags ocr` to any `go` command when building/fetching/testing `docconv` to include support for processing images:
+完成後，於建置、下載或測試 `docconv` 時加上 `-tags ocr` 參數，即可啟用影像處理：
 
 ```console
 $ go get -tags ocr code.sajari.com/docconv/v2/...
 ```
 
-This may complain on macOS, which you can fix by installing [tesseract](https://tesseract-ocr.github.io) via brew:
+在 macOS 上若遇到錯誤，可透過 brew 安裝 [tesseract](https://tesseract-ocr.github.io) 解決：
 
 ```console
 $ brew install tesseract
 ```
 
-## docd tool
+## docd 工具
 
-The `docd` tool runs as either:
+`docd` 可以以下列幾種方式運行：
 
-1.  a service on port 8888 (by default)
+1.  預設在 8888 埠口上運行的服務
 
-    Documents can be sent as a multipart POST request and the plain text (body) and meta information are then returned as a JSON object.
+    可透過 multipart POST 傳送文件，服務會回傳純文字內容與後設資訊的 JSON。
 
-2.  a service exposed from within a Docker container
+2.  於 Docker container 中執行的服務
 
-    This also runs as a service, but from within a Docker container.
-    Official images are published at https://hub.docker.com/r/sajari/docd.
+    同樣以服務方式執行，但封裝在 Docker container 中。
+    官方映像位於 https://hub.docker.com/r/sajari/docd。
 
-    Optionally you can build it yourself:
+    你也可以自行建置：
 
     ```console
     $ cd docd
     $ docker build -t docd .
     ```
 
-3.  via the command line.
+3.  直接使用指令列。
 
-    Documents can be sent as an argument, e.g.
+    將檔案路徑作為參數，例如：
 
     ```console
     $ docd -input document.pdf
     ```
 
-### Optional flags
+### 其他旗標
 
-- `addr` - the bind address for the HTTP server, default is ":8888"
-- `readability-length-low` - sets the readability length low if the ?readability=1 parameter is set
-- `readability-length-high` - sets the readability length high if the ?readability=1 parameter is set
-- `readability-stopwords-low` - sets the readability stopwords low if the ?readability=1 parameter is set
-- `readability-stopwords-high` - sets the readability stopwords high if the ?readability=1 parameter is set
-- `readability-max-link-density` - sets the readability max link density if the ?readability=1 parameter is set
-- `readability-max-heading-distance` - sets the readability max heading distance if the ?readability=1 parameter is set
-- `readability-use-classes` - comma separated list of readability classes to use if the ?readability=1 parameter is set
+- `addr` - HTTP 伺服器綁定地址，預設為 ":8888"
+- `readability-length-low` - 配合 ?readability=1 參數設定 readability 的 length low
+- `readability-length-high` - 配合 ?readability=1 參數設定 readability 的 length high
+- `readability-stopwords-low` - 配合 ?readability=1 參數設定 stopwords low
+- `readability-stopwords-high` - 配合 ?readability=1 參數設定 stopwords high
+- `readability-max-link-density` - 配合 ?readability=1 參數設定最大連結密度
+- `readability-max-heading-distance` - 配合 ?readability=1 參數設定最大標題距離
+- `readability-use-classes` - 配合 ?readability=1 參數指定 readability 類別，逗號分隔
 
-### How to start the service
+### 啟動服務
 
 ```console
-$ # This runs on port 8000
+$ # 於 8000 埠口啟動
 $ docd -addr :8000
 ```
 
-## Example usage (code)
+## 範例程式
 
-Some basic code is shown below, but normally you would accept the file by HTTP or open it from the file system.
+以下範例僅供參考，實際情況通常是透過 HTTP 收取檔案或從檔案系統讀取。
 
-This should be enough to get you started though.
+這應該足以讓你開始使用。
 
-### Use case 1: run locally
+### 使用情境一：在本機執行
 
-> Note: this assumes you have the [dependencies](#dependencies) installed.
+> 注意：假設你已安裝好[依賴套件](#依賴套件)。
 
 ```go
 package main
@@ -131,7 +132,7 @@ func main() {
 }
 ```
 
-### Use case 2: request over the network
+### 使用情境二：透過網路請求
 
 ```go
 package main
@@ -143,8 +144,8 @@ import (
 )
 
 func main() {
-	// Create a new client, using the default endpoint (localhost:8888)
-	c := client.New()
+        // 建立新客戶端，預設端點為 localhost:8888
+        c := client.New()
 
 	res, err := client.ConvertPath(c, "your-file.pdf")
 	if err != nil {
@@ -154,8 +155,30 @@ func main() {
 }
 ```
 
-Alternatively, via a `curl`:
+也可以透過 `curl` 直接請求：
 
 ```console
 $ curl -s -F input=@your-file.pdf http://localhost:8888/convert
+```
+
+### 將 DOCX 轉換為 PDF
+
+若已安裝 libreoffice，可利用下列輔助函式將 DOCX 檔轉成 PDF：
+
+```go
+package main
+
+import (
+        "fmt"
+
+        "code.sajari.com/docconv/v2"
+)
+
+func main() {
+        pdfPath, err := docconv.ConvertDocxToPDF("document.docx", "/tmp")
+        if err != nil {
+                // TODO: handle
+        }
+        fmt.Println("PDF 輸出於", pdfPath)
+}
 ```

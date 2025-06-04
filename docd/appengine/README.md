@@ -1,6 +1,6 @@
-# Deploying docd to AppEngine
+# 將 docd 部署到 AppEngine
 
-Within this directory run:
+在此目錄中執行：
 
 ```
 gcloud app deploy
