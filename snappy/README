@@ -1,13 +1,10 @@
-This is a Snappy library for the Go programming language that has been modified to work with Apple files, which fail to set CRC checks and stream identifiers. This version is a total hack, so if you want to use snappy for other projects **DO NOT USE THIS VERSION**. Use the proper version as per below:
+這是一個供 Go 使用的 Snappy 函式庫，已修改以處理 Apple 檔案（這些檔案未設定 CRC 檢查與串流識別）。此版本僅為臨時方案，若要在其他專案使用 Snappy，**請勿使用此版本**，請使用下方連結所指的正式版本。
 
-To download and install from source:
+從原始碼下載並安裝：
 $ go get code.google.com/p/snappy-go/snappy
 
+除非另有說明，Snappy-Go 原始碼以 LICENSE 檔中所列的 BSD 授權釋出。
 
-
-Unless otherwise noted, the Snappy-Go source files are distributed
-under the BSD-style license found in the LICENSE file.
-
-Contributions should follow the same procedure as for the Go project:
+貢獻時請遵循 Go 專案的流程：
 http://golang.org/doc/contribute.html
 
